@@ -1,0 +1,27 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Turhake</title>
+        <meta charset="utf-8" />
+    </head>
+
+    <body>
+        <h1>Kysy tai Vastaa</h1>
+        
+        
+        <p><a href="/kurssit">Kysymyksiin!</a></p>
+    
+    <h2>Uuden kysymyksen luominen:</h2>
+    <form method="POST" action="/etusivu">
+        Kurssi:<br/>
+        <input type="text" name="kurssi"/><br/>
+        Aihe:<br/>
+        <input type="text" name="aihe"/><br/>
+        Kysymys:<br/>
+        <input type="text" name="kysymys"/><br/>
+        <input type="submit" value="+"/>
+    </form>
+    </body>
+
+</html>

@@ -30,16 +30,16 @@ public class Main {
         VastausDao vdao = new VastausDao(database);
         KysymysDao kdao = new KysymysDao(database);
 
-        get("/etusivu", (req, res) -> {
+        get("/", (req, res) -> {
             HashMap map = new HashMap<>();
             return new ModelAndView(map, "etusivu");
         }, new ThymeleafTemplateEngine());
 
-        Spark.post("/etusivu", (req, res) -> {
+        Spark.post("/", (req, res) -> {
             Kysymys kysymys = new Kysymys(req.queryParams("kurssi"), req.queryParams("aihe"), req.queryParams("kysymys"));
             kdao.save(kysymys);
 
-            res.redirect("/etusivu");
+            res.redirect("/");
             return "";
         });
 

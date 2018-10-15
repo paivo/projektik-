@@ -29,6 +29,8 @@ public class Main {
 
         VastausDao vdao = new VastausDao(database);
         KysymysDao kdao = new KysymysDao(database);
+        
+        
 
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -38,31 +40,44 @@ public class Main {
         Spark.post("/", (req, res) -> {
             Kysymys kysymys = new Kysymys(req.queryParams("kurssi"), req.queryParams("aihe"), req.queryParams("kysymys"));
             kdao.save(kysymys);
-
             res.redirect("/");
             return "";
         });
 
         get("/kurssit", (req, res) -> {
-            HashMap kurssilista = new HashMap<>();
+            if (kdao.getKurssit()==null){
+                HashMap palautus = new HashMap();
+                palautus.put("palautettava", "Kursseja ei ole luotu.");
+                return new ModelAndView(palautus, "eipalautettavaa");
+            }
+            HashMap kurssilista = new HashMap();
             kurssilista.put("kurssit", kdao.getKurssit());
-
             return new ModelAndView(kurssilista, "kurssit");
         }, new ThymeleafTemplateEngine());
 
         get("/kurssit/:kurssi", (req, res) -> {
+            List aiheet = kdao.getAiheet(req.params("kurssi"));
+            if (aiheet==null){
+                HashMap palautus = new HashMap();
+                palautus.put("palautettava", "Kurssille ei ole luotu aiheita.");
+                return new ModelAndView(palautus, "eipalautettavaa");
+            }
             HashMap kurssinaiheet = new HashMap<>();
-            kurssinaiheet.put("aiheet", kdao.getAiheet(req.params("kurssi")));
-
+            kurssinaiheet.put("aiheet", aiheet);
             return new ModelAndView(kurssinaiheet, "aiheet");
         }, new ThymeleafTemplateEngine());
 
         get("/aiheet/:aihe", (req, res) -> {
+            List kysymykset = kdao.getKysymykset(req.params("aihe"));
+            if (kysymykset==null){
+                HashMap palautus = new HashMap();
+                palautus.put("palautettava", "Aiheelle ei ole luotu kysymyksia.");
+                return new ModelAndView(palautus, "eipalautettavaa");
+            }
             HashMap aiheenkysymykset = new HashMap<>();
-            aiheenkysymykset.put("kysymykset", kdao.getKysymykset(req.params("aihe")));
-
+            aiheenkysymykset.put("kysymykset", kysymykset);
             return new ModelAndView(aiheenkysymykset, "kysymykset");
         }, new ThymeleafTemplateEngine());
-
+        
     }
 }

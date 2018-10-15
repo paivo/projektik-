@@ -80,7 +80,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
     @Override
     public void delete(Kysymys kysymys) throws SQLException {
         try (Connection conn = database.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("DELETE * FROM Kysymys WHERE kurssi = ? AND aihe = ? AND kysymysteksti = ?");
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Kysymys WHERE kurssi = ? AND aihe = ? AND kysymysteksti = ?");
             stmt.setString(1, kysymys.getAihe());
             stmt.setString(2, kysymys.getKurssi());
             stmt.setString(3, kysymys.getKysymysteksti());
@@ -103,7 +103,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         List<String> aiheet = new ArrayList();
         for (Kysymys kysymys: findAll()){
             String teksti = kysymys.getAihe();
-            if ( ( !teksti.isEmpty() )&&( kysymys.getKurssi().equals(kurssi) )&&( !aiheet.contains(teksti) ) ){
+            if ( ( !teksti.isEmpty() )&&( kysymys.getKurssi().equals(kurssi) )&&( !aiheet.contains(teksti)   ) ){
                 //valitaan vain kyseisen kurssin epätyhjät aiheet ja lisätään ne vain kerran
                 aiheet.add(teksti);
             }

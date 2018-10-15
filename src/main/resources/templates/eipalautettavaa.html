@@ -7,12 +7,8 @@
     </head>
 
     <body>
-        <h1>Valitse Kysymys</h1>
-        
-        <ol>
-            <li th:each="kysymys: ${kysymykset}">
-                <span th:text="${kysymys}">kysymys</span> <a th:href="${'/kysymykset/' + kysymys}">-></a>
-            </li>
-        </ol>
+
+        <h2 th:text="${palautettava}">teksti</h2>
+
     </body>
 </html>

@@ -9,10 +9,10 @@
     <body>
         <h1>Valitse Kurssi</h1>
         
-        <ol>
+        <ul>
             <li th:each="kurssi: ${kurssit}">
                 <span th:text="${kurssi}">kurssin nimi</span> <a th:href="${'/kurssit/' + kurssi}">-></a>
             </li>
-        </ol>
+        </ul>
     </body>
 </html>

@@ -21,9 +21,9 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        if (System.getenv("PORT") != null) {
-            Spark.port(Integer.valueOf(System.getenv("PORT")));
-        }
+        //if (System.getenv("PORT") != null) {
+        //   Spark.port(Integer.valueOf(System.getenv("PORT")));
+        //}
         File tiedosto = new File("db", "taulu.db");
         Database database = new Database("jdbc:sqlite:" + tiedosto.getAbsolutePath());
 
@@ -31,50 +31,40 @@ public class Main {
         KysymysDao kdao = new KysymysDao(database);
         
         
-
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
-            return new ModelAndView(map, "etusivu");
+            return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
-
+        
         Spark.post("/", (req, res) -> {
-            Kysymys kysymys = new Kysymys(req.queryParams("kurssi"), req.queryParams("aihe"), req.queryParams("kysymys"));
-            kdao.save(kysymys);
+            String kurssi = req.queryParams("kurssi");
+            String aihe = req.queryParams("aihe");
+            String kysymysteksti = req.queryParams("kysymys");
+            if (!(kurssi.isEmpty() || aihe.isEmpty() || kysymysteksti.isEmpty())) {
+                //Varmistetaan että ei saada tyhjää syötettä.
+                Kysymys kysymys = new Kysymys(kurssi, aihe, kysymysteksti);
+                kdao.save(kysymys);
+            }
             res.redirect("/");
             return "";
         });
 
         get("/kurssit", (req, res) -> {
-            if (kdao.getKurssit()==null){
-                HashMap palautus = new HashMap();
-                palautus.put("palautettava", "Kursseja ei ole luotu.");
-                return new ModelAndView(palautus, "eipalautettavaa");
-            }
             HashMap kurssilista = new HashMap();
             kurssilista.put("kurssit", kdao.getKurssit());
             return new ModelAndView(kurssilista, "kurssit");
         }, new ThymeleafTemplateEngine());
 
         get("/kurssit/:kurssi", (req, res) -> {
-            List aiheet = kdao.getAiheet(req.params("kurssi"));
-            if (aiheet==null){
-                HashMap palautus = new HashMap();
-                palautus.put("palautettava", "Kurssille ei ole luotu aiheita.");
-                return new ModelAndView(palautus, "eipalautettavaa");
-            }
+            List aiheet = kdao.getAiheet(":kurssi");
             HashMap kurssinaiheet = new HashMap<>();
             kurssinaiheet.put("aiheet", aiheet);
             return new ModelAndView(kurssinaiheet, "aiheet");
         }, new ThymeleafTemplateEngine());
 
         get("/aiheet/:aihe", (req, res) -> {
-            List kysymykset = kdao.getKysymykset(req.params("aihe"));
-            if (kysymykset==null){
-                HashMap palautus = new HashMap();
-                palautus.put("palautettava", "Aiheelle ei ole luotu kysymyksia.");
-                return new ModelAndView(palautus, "eipalautettavaa");
-            }
-            HashMap aiheenkysymykset = new HashMap<>();
+            List kysymykset = kdao.getKysymykset(":aihe");
+            HashMap aiheenkysymykset = new HashMap();
             aiheenkysymykset.put("kysymykset", kysymykset);
             return new ModelAndView(aiheenkysymykset, "kysymykset");
         }, new ThymeleafTemplateEngine());

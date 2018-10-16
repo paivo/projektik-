@@ -9,10 +9,10 @@
     <body>
         <h1>Valitse Kysymys</h1>
         
-        <ol>
+        <ul>
             <li th:each="kysymys: ${kysymykset}">
                 <span th:text="${kysymys}">kysymys</span> <a th:href="${'/kysymykset/' + kysymys}">-></a>
             </li>
-        </ol>
+        </ul>
     </body>
 </html>

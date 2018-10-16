@@ -69,5 +69,12 @@ public class Main {
             return new ModelAndView(aiheenkysymykset, "kysymykset");
         }, new ThymeleafTemplateEngine());
         
+        get("/kysymykset/:kysymys", (req, res) -> {
+            List kysymykset = vdao.getKysymyksenVastaukset(":kysymys");
+            HashMap kaikkikysymykset = new HashMap();
+            kaikkikysymykset.put("kysymykset", kysymykset);
+            return new ModelAndView(kaikkikysymykset, "vastaukset");
+        }, new ThymeleafTemplateEngine());
+        
     }
 }

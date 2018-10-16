@@ -66,6 +66,7 @@ public class VastausDao implements Dao <Vastaus,Integer>{
         conn.close();    
     }
     
+    @Override
     public Boolean findOne(Vastaus vastaus) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Vastaus WHERE kysymys_id = ? AND vastausteksti = ? AND oikein = ?");
@@ -94,11 +95,13 @@ public class VastausDao implements Dao <Vastaus,Integer>{
         }
     }
     
-    public List<String> getKysymyksenVastaukset(Kysymys kysymys) throws SQLException {
+    public List<String> getKysymyksenVastaukset(String kysymys) throws SQLException {
         List<String> vastaukset = new ArrayList();
         for(Vastaus vastaus: findAll()) {
-            if (!vastaukset.contains(vastaus.getVastausteksti())) {
-                vastaukset.add(vastaus.getVastausteksti());
+            String teksti = vastaus.getVastausteksti();
+            if (!vastaukset.contains(teksti)) {
+                if ()
+                vastaukset.add(teksti);
                 
             }
             

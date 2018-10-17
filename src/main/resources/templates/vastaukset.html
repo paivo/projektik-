@@ -7,11 +7,11 @@
     </head>
 
     <body>
-        <h1>Valitse Kysymys</h1>
+        <h1>Valitse Vastaus</h1>
         
         <ul>
-            <li th:each="kysymys: ${kysymykset}">
-                <span th:text="${kysymys}">kysymys</span> <a th:href="${'/kysymykset/' + kysymys}">-></a>
+            <li th:each="vastaus: ${vastaukset}">
+                <span th:text="${vastaus.vastausteksti}">vastaus</span> <a th:href="${'/oikein/' + vastaus.id}">-></a>
             </li>
         </ul>
     </body>

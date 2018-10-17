@@ -10,15 +10,8 @@
         <h1>Valitse Kurssi</h1>
         
         <ul>
-            <li th:each="kurssi: ${kurssit}">
-            <span th:text="${kurssi}">kurssin nimi</span>
-                <ul>
-                    <li th:each="aihe: ${aiheet}">
-                        <span th:text="${aihe}">aihe</span> <a th:href="${'/aiheet/' + kurssi + aihe}">-></a>
-                        
-                    </li>
-                </ul>
-                
+            <li th:each="kysymys: ${kysymykset}">
+            <span th:text="${kysymys.kurssi}">kurssi</span><a th:href="${'/aiheet/' + kysymys.id}">-></a>
             </li>
         </ul>
     </body>

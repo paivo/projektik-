@@ -66,7 +66,22 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         stmt.close();
         conn.close();
     }
+    
+    public Kysymys findOne(Integer id) throws SQLException {
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Kysymys WHERE id = ?");
+            stmt.setInt(1, id);
 
+            ResultSet result = stmt.executeQuery();
+            if (result.next()){
+                return null;
+            }
+            Kysymys kysymys = new Kysymys( result.getString("kurssi"), result.getString("aihe"), result.getString("kysymysteksti"));
+            kysymys.setId(id);
+            return kysymys;
+        }
+    }
+    
     @Override
     public Boolean findOne(Kysymys kysymys) throws SQLException {
         try (Connection conn = database.getConnection()) {
@@ -90,40 +105,51 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         }
     }
     
-    public List<String> getKysymykset(String kurssi, String aihe) throws SQLException {
-        List<String> kysymykset = new ArrayList();
+    public List<Kysymys> getKysymykset(String kurssi, String aihe) throws SQLException {
+        List<Kysymys> kysymykset = new ArrayList();
         for (Kysymys kysymys: findAll()){
-            String teksti = kysymys.getKysymysteksti();
-            if ( ( !teksti.isEmpty() )&&( kysymys.getAihe().equals(aihe) )&&( !kysymykset.contains(teksti) )&&( kysymys.getKurssi().equals(kurssi)) ){
-                //valitaan vain kyseisen aiheen epätyhjät kysymykset ja lisätään ne vain kerran
-                kysymykset.add(teksti);
+            if ( ( kysymys.getAihe().equals(aihe) )&&( !kysymykset.contains(kysymys) )&&( kysymys.getKurssi().equals(kurssi)) ){
+                //valitaan vain kyseisen aiheen kysymykset ja lisätään ne vain kerran
+                kysymykset.add(kysymys);
             }
         }
         return kysymykset;
     }
-    
-    public List<String> getAiheet(String kurssi) throws SQLException{
-        List<String> aiheet = new ArrayList();
-        for (Kysymys kysymys: findAll()){
-            String teksti = kysymys.getAihe();
-            if ( ( !teksti.isEmpty() )&&( kysymys.getKurssi().equals(kurssi) )&&( !aiheet.contains(teksti)   ) ){
-                //valitaan vain kyseisen kurssin epätyhjät aiheet ja lisätään ne vain kerran
-                aiheet.add(teksti);
+    //kysymykset kurssin perusteella
+    public List<Kysymys> findKysymysPerAihe(String kurssi) throws SQLException {
+        List<Kysymys> kysymykset = new ArrayList();
+        //Tarkistetaan onko kysymykset listassa jo kysymystä joilla sama kurssi.
+        for(Kysymys kysymys: findAll()){
+            int i = 0;
+            for (Kysymys kysymys2: kysymykset){
+                if (kysymys.getAihe().equals(kysymys2.getAihe())){
+                    i++;
+                }
             }
-                
-        }
-        return aiheet;
-    }
-    
-    public List<String> getKurssit() throws SQLException{
-        List<String> kurssit = new ArrayList();
-        for (Kysymys kysymys: findAll()){
-            if (!kurssit.contains(kysymys.getKurssi())){
-                kurssit.add(kysymys.getKurssi());
+            
+            if ( (i==0) && (kysymys.getKurssi().equals(kurssi)) ){
+                kysymykset.add(kysymys);
             }
-                
         }
-        return kurssit;
+        
+        return kysymykset;
     }
-
+    //kysymykset kurssin perusteella
+    public List<Kysymys> findKysymysPerKurssi() throws SQLException {
+        List<Kysymys> kysymykset = new ArrayList();
+        //Tarkistetaan onko kysymykset listassa jo kysymystä jolla sama kurssi.
+        for(Kysymys kysymys: findAll()){
+            int i = 0;
+            for (Kysymys kysymys2: kysymykset){
+                if (kysymys.getKurssi().equals(kysymys2.getKurssi())){
+                    i++;
+                }
+            }
+            if (i==0){
+                kysymykset.add(kysymys);
+            }
+        }
+        
+        return kysymykset;
+    }
 }

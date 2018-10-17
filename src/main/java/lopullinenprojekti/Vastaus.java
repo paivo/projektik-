@@ -39,5 +39,12 @@ public class Vastaus {
 
     public Boolean getOikein() {
         return this.oikein;
+    } 
+    
+    public String getTotuus() {
+        if (this.oikein) {
+            return "Oikein!";
+        }
+        return "Väärin!";
     }
 }

@@ -10,8 +10,8 @@
         <h1>Valitse Aihe</h1>
         
         <ul>
-            <li th:each="aihe: ${aiheet}">
-                <span th:text="${aihe}">aihe</span> <a th:href="${'/aiheet/' + aihe}">-></a>
+            <li th:each="kysymys: ${kysymykset}">
+                <span th:text="${kysymys.aihe}">aihe</span> <a th:href="${'/kysymykset/' + kysymys.id}">-></a>
             </li>
         </ul>
     </body>

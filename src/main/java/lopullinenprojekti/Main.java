@@ -46,35 +46,49 @@ public class Main {
         });
 
         get("/kurssit", (req, res) -> {
-            HashMap kurssilista = new HashMap();
-            List aiheet = kdao.getAiheet(":kurssi");
-            kurssilista.put("kurssit", kdao.getKurssit());
-            kurssilista.put("aiheet", aiheet);
-            return new ModelAndView(kurssilista, "kurssit");
+            HashMap kysymykset = new HashMap();
+            kysymykset.put("kysymykset", kdao.findKysymysPerKurssi());
+            return new ModelAndView(kysymykset, "kurssit");
         }, new ThymeleafTemplateEngine());
 
-        
-        
-       // get("/kurssit/:kurssi", (req, res) -> {
-        //    List aiheet = kdao.getAiheet(":kurssi");
-        //    HashMap kurssinaiheet = new HashMap<>();
-        //    kurssinaiheet.put("aiheet", aiheet);
-        //    return new ModelAndView(kurssinaiheet, "aiheet");
-       // }, new ThymeleafTemplateEngine());
+        get("/aiheet/:id", (req, res) -> {
+            Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
+            HashMap kysymykset = new HashMap();
+            kysymykset.put("kysymykset", kdao.findKysymysPerAihe(kysymys.getKurssi()));
+            return new ModelAndView(kysymykset, "aiheet");
+        }, new ThymeleafTemplateEngine());
 
-        get("/aiheet/", (req, res) -> {
-            List kysymykset = kdao.getKysymykset(":kurssi", ":aihe");
-            HashMap aiheenkysymykset = new HashMap();
-            aiheenkysymykset.put("kysymykset", kysymykset);
-            return new ModelAndView(aiheenkysymykset, "kysymykset");
+        get("/kysymykset/:id", (req, res) -> {
+            Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
+            HashMap kysymykset = new HashMap();
+            kysymykset.put("kysymykset", kdao.getKysymykset(kysymys.getKurssi(), kysymys.getAihe()));
+            return new ModelAndView(kysymykset, "kysymykset");
         }, new ThymeleafTemplateEngine());
         
-        get("/kysymykset/:kysymys", (req, res) -> {
-            List kysymykset = vdao.getKysymyksenVastaukset(":kysymys");
-            HashMap kaikkikysymykset = new HashMap();
-            kaikkikysymykset.put("kysymykset", kysymykset);
-            return new ModelAndView(kaikkikysymykset, "vastaukset");
+        //////////////////////////////kysymysten poistaminen
+        
+        Spark.post("/kysymykset/:id", (req, res) -> {
+            String kurssi = req.queryParams("kurssi");
+            String aihe = req.queryParams("aihe");
+            String kysymysteksti = req.queryParams("kysymys");
+            kdao.save(new Kysymys(kurssi, aihe, kysymysteksti));
+            res.redirect("/");
+            return "";
+        });
+        
+        ////////////////////////////////
+        
+        get("/vastaukset/:id", (req, res) -> {
+            Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
+            HashMap vastaukset = new HashMap();
+            vastaukset.put("vastaukset", vdao.getKysymyksenVastaukset(kysymys));
+            return new ModelAndView(vastaukset, "vastaukset");
         }, new ThymeleafTemplateEngine());
         
+        get("/oikein/:id", (req, res) -> {
+            HashMap vastaus = new HashMap();
+            vastaus.put("vastaus", vdao.findOne(Integer.parseInt(":id")));
+            return new ModelAndView(vastaus, "oikein");
+        }, new ThymeleafTemplateEngine());
     }
 }

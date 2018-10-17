@@ -40,30 +40,30 @@ public class Main {
             String kurssi = req.queryParams("kurssi");
             String aihe = req.queryParams("aihe");
             String kysymysteksti = req.queryParams("kysymys");
-            if (!(kurssi.isEmpty() || aihe.isEmpty() || kysymysteksti.isEmpty())) {
-                //Varmistetaan että ei saada tyhjää syötettä.
-                Kysymys kysymys = new Kysymys(kurssi, aihe, kysymysteksti);
-                kdao.save(kysymys);
-            }
+            kdao.save(new Kysymys(kurssi, aihe, kysymysteksti));
             res.redirect("/");
             return "";
         });
 
         get("/kurssit", (req, res) -> {
             HashMap kurssilista = new HashMap();
+            List aiheet = kdao.getAiheet(":kurssi");
             kurssilista.put("kurssit", kdao.getKurssit());
+            kurssilista.put("aiheet", aiheet);
             return new ModelAndView(kurssilista, "kurssit");
         }, new ThymeleafTemplateEngine());
 
-        get("/kurssit/:kurssi", (req, res) -> {
-            List aiheet = kdao.getAiheet(":kurssi");
-            HashMap kurssinaiheet = new HashMap<>();
-            kurssinaiheet.put("aiheet", aiheet);
-            return new ModelAndView(kurssinaiheet, "aiheet");
-        }, new ThymeleafTemplateEngine());
+        
+        
+       // get("/kurssit/:kurssi", (req, res) -> {
+        //    List aiheet = kdao.getAiheet(":kurssi");
+        //    HashMap kurssinaiheet = new HashMap<>();
+        //    kurssinaiheet.put("aiheet", aiheet);
+        //    return new ModelAndView(kurssinaiheet, "aiheet");
+       // }, new ThymeleafTemplateEngine());
 
-        get("/aiheet/:aihe", (req, res) -> {
-            List kysymykset = kdao.getKysymykset(":aihe");
+        get("/aiheet/", (req, res) -> {
+            List kysymykset = kdao.getKysymykset(":kurssi", ":aihe");
             HashMap aiheenkysymykset = new HashMap();
             aiheenkysymykset.put("kysymykset", kysymykset);
             return new ModelAndView(aiheenkysymykset, "kysymykset");

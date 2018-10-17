@@ -50,6 +50,9 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
 
     @Override
     public void save(Kysymys kysymys) throws SQLException {
+        if ( (kysymys.getKurssi().isEmpty() || kysymys.getAihe().isEmpty() || kysymys.getKysymysteksti().isEmpty()) ) {
+            return;
+        }
         if (findOne(kysymys)) {
             return;
         }
@@ -87,11 +90,11 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         }
     }
     
-    public List<String> getKysymykset(String aihe) throws SQLException {
+    public List<String> getKysymykset(String kurssi, String aihe) throws SQLException {
         List<String> kysymykset = new ArrayList();
         for (Kysymys kysymys: findAll()){
             String teksti = kysymys.getKysymysteksti();
-            if ( ( !teksti.isEmpty() )&&( kysymys.getAihe().equals(aihe) )&&( !kysymykset.contains(teksti) ) ){
+            if ( ( !teksti.isEmpty() )&&( kysymys.getAihe().equals(aihe) )&&( !kysymykset.contains(teksti) )&&( kysymys.getKurssi().equals(kurssi)) ){
                 //valitaan vain kyseisen aiheen epätyhjät kysymykset ja lisätään ne vain kerran
                 kysymykset.add(teksti);
             }

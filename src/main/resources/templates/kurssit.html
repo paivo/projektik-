@@ -11,7 +11,14 @@
         
         <ul>
             <li th:each="kurssi: ${kurssit}">
-                <span th:text="${kurssi}">kurssin nimi</span> <a th:href="${'/kurssit/' + kurssi}">-></a>
+            <span th:text="${kurssi}">kurssin nimi</span>
+                <ul>
+                    <li th:each="aihe: ${aiheet}">
+                        <span th:text="${aihe}">aihe</span> <a th:href="${'/aiheet/' + kurssi + aihe}">-></a>
+                        
+                    </li>
+                </ul>
+                
             </li>
         </ul>
     </body>

@@ -84,9 +84,7 @@ public class VastausDao implements Dao <Vastaus,Integer>{
             stmt.setInt(1, id);
 
             ResultSet result = stmt.executeQuery();
-            if (!result.next()){
-                return null;
-            }
+            result.next();
             Vastaus vastaus = new Vastaus( result.getInt("kysymys_id"), result.getString("vastausteksti"), result.getBoolean("oikein"));
             vastaus.setId(id);
             return vastaus;

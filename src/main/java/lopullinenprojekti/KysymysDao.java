@@ -73,9 +73,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
             stmt.setInt(1, id);
 
             ResultSet result = stmt.executeQuery();
-            if (!result.next()){
-                return null;
-            }
+            result.next();
             Kysymys kysymys = new Kysymys( result.getString("kurssi"), result.getString("aihe"), result.getString("kysymysteksti"));
             kysymys.setId(id);
             return kysymys;
@@ -115,7 +113,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         }
         return kysymykset;
     }
-    //kysymykset kurssin perusteella
+    
     public List<Kysymys> findKysymysPerAihe(String kurssi) throws SQLException {
         List<Kysymys> kysymykset = new ArrayList();
         //Tarkistetaan onko kysymykset listassa jo kysymystä joilla sama kurssi.
@@ -123,7 +121,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
             int i = 0;
             for (Kysymys kysymys2: kysymykset){
                 if (kysymys.getAihe().equals(kysymys2.getAihe())){
-                    i++;
+                    i=1;
                 }
             }
             
@@ -134,7 +132,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         
         return kysymykset;
     }
-    //kysymykset kurssin perusteella
+    
     public List<Kysymys> findKysymysPerKurssi() throws SQLException {
         List<Kysymys> kysymykset = new ArrayList();
         //Tarkistetaan onko kysymykset listassa jo kysymystä jolla sama kurssi.

@@ -51,11 +51,7 @@ public class Main {
 
         get("/kurssit", (req, res) -> {
             HashMap kysymykset = new HashMap();
-            List kysymyslista = kdao.findKysymysPerKurssi();
-            if (kysymyslista.isEmpty()){
-                kysymyslista.add(new Kysymys("", "", ""));
-            }
-            kysymykset.put("kysymykset", kysymyslista);
+            kysymykset.put("kysymykset", kdao.findKysymysPerKurssi());
             return new ModelAndView(kysymykset, "kurssit");
         }, new ThymeleafTemplateEngine());
 

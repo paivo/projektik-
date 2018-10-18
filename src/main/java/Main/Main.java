@@ -1,4 +1,4 @@
-package lopullinenprojekti;
+package Main;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,6 +13,10 @@ import static spark.Spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import java.util.List;
 import java.util.Map;
+import lopullinenprojekti.Database;
+import lopullinenprojekti.Kysymys;
+import lopullinenprojekti.KysymysDao;
+import lopullinenprojekti.VastausDao;
 
 /**
  *

@@ -56,14 +56,14 @@ public class Main {
         }, new ThymeleafTemplateEngine());
 
         get("/aiheet/:id", (req, res) -> {
-            Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
+            Kysymys kysymys = kdao.findOne(Integer.parseInt(req.params("id")));
             HashMap kysymykset = new HashMap();
             kysymykset.put("kysymykset", kdao.findKysymysPerAihe(kysymys.getKurssi()));
             return new ModelAndView(kysymykset, "aiheet");
         }, new ThymeleafTemplateEngine());
 
         get("/kysymykset/:id", (req, res) -> {
-            Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
+            Kysymys kysymys = kdao.findOne(Integer.parseInt(req.params("id")));
             HashMap kysymykset = new HashMap();
             kysymykset.put("kysymykset", kdao.getKysymykset(kysymys.getKurssi(), kysymys.getAihe()));
             return new ModelAndView(kysymykset, "kysymykset");
@@ -71,14 +71,6 @@ public class Main {
         
         //////////////////////////////kysymysten poistaminen
         
-        Spark.post("/kysymykset/:id", (req, res) -> {
-            String kurssi = req.queryParams("kurssi");
-            String aihe = req.queryParams("aihe");
-            String kysymysteksti = req.queryParams("kysymys");
-            kdao.save(new Kysymys(kurssi, aihe, kysymysteksti));
-            res.redirect("/");
-            return "";
-        });
         
         ////////////////////////////////
         

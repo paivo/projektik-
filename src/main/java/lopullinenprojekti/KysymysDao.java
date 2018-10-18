@@ -73,7 +73,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
             stmt.setInt(1, id);
 
             ResultSet result = stmt.executeQuery();
-            if (result.next()){
+            if (!result.next()){
                 return null;
             }
             Kysymys kysymys = new Kysymys( result.getString("kurssi"), result.getString("aihe"), result.getString("kysymysteksti"));

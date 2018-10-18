@@ -7,12 +7,20 @@
     </head>
 
     <body>
-        <h1>Valitse Kurssi</h1>
-        
-        <ul>
-            <li th:each="kysymys: ${kysymykset}">
-            <span th:text="${kysymys.kurssi}">kurssi</span><a th:href="${'/aiheet/' + kysymys.id}">-></a>
-            </li>
-        </ul>
+        <div th:if="${#lists.isEmpty(kysymykset)}">
+            <h1>Lisää ensin kysymys!</h1>
+        </div>
+
+        <div th:unless="Valitse Kurssi">
+
+            <ul>
+                <li th:each="kysymys: ${kysymykset}">
+                    <span th:text="${kysymys.kurssi}">kurssi</span><a th:href="${'/aiheet/' + kysymys.id}">-></a>
+                </li>
+            </ul>
+
+        </div>
+
+
     </body>
 </html>

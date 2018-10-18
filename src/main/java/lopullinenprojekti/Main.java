@@ -47,9 +47,6 @@ public class Main {
 
         get("/kurssit", (req, res) -> {
             HashMap kysymykset = new HashMap();
-            //if (kdao.findAll() == null) {
-            //    return new ModelAndView(new HashMap(), "ei_tauluja");
-            //}
             kysymykset.put("kysymykset", kdao.findKysymysPerKurssi());
             return new ModelAndView(kysymykset, "kurssit");
         }, new ThymeleafTemplateEngine());

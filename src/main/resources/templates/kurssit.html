@@ -8,10 +8,12 @@
 
     <body>
         <h2 th:text="${#lists.isEmpty(kysymykset)} ? 'Lisää ensin kysymys!' : 'Valitse kurssi'"> </h2>
-        <ul>
-            <li th:each="kysymys: ${kysymykset}">
-                <span th:text="${kysymys.kurssi}">kurssi</span><a th:href="${'/aiheet/' + kysymys.id}">-></a>
-            </li>
-        </ul>
+        <div th:if="${not #lists.isEmpty(kysymykset)}">
+            <ul>
+                <li th:each="kysymys: ${kysymykset}">
+                    <span th:text="${kysymys.kurssi}">kurssi</span><a th:href="${'/aiheet/' + kysymys.id}">-></a>
+                </li>
+            </ul>
+        </div>
     </body>
 </html>

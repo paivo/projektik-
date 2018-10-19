@@ -5,7 +5,15 @@ import java.util.*;
 
 public interface Dao<T, K> {
 
-    Boolean findOne(T object) throws SQLException;
+    /**
+     *
+     * @param object
+     * @return
+     * @throws SQLException
+     */
+    Object findOne(T object) throws SQLException;
+    
+    Object findOne(Integer id) throws SQLException;
 
     List<T> findAll() throws SQLException;
 

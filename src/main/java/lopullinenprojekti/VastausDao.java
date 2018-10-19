@@ -28,12 +28,7 @@ public class VastausDao implements Dao <Vastaus,Integer>{
     public List<Vastaus> findAll() throws SQLException {
         List<Vastaus> vastaukset = new ArrayList();
         Connection connection;
-        try {
-            connection = database.getConnection();
-        } catch (Exception ex) {
-            Logger.getLogger(VastausDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Vastaus");
         ResultSet rs = stmt.executeQuery();
         
@@ -51,7 +46,7 @@ public class VastausDao implements Dao <Vastaus,Integer>{
     
     @Override
     public void save(Vastaus vastaus) throws SQLException {
-        if (findOne(vastaus)) {
+        if (findOne(vastaus)!=null) {
             return;
         }
         Connection conn = database.getConnection();
@@ -70,17 +65,21 @@ public class VastausDao implements Dao <Vastaus,Integer>{
     }
     
     @Override
-    public Boolean findOne(Vastaus vastaus) throws SQLException {
+    public Vastaus findOne(Vastaus vastaus) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Vastaus WHERE kysymys_id = ? AND vastausteksti = ? AND oikein = ?");
             stmt.setInt(1, vastaus.getKysymysId());
             stmt.setString(2, vastaus.getVastausteksti());
             stmt.setBoolean(3, vastaus.getOikein());
             ResultSet result = stmt.executeQuery();
-            return result.next();
+            result.next();
+            Vastaus vastaus2 = new Vastaus( result.getInt("kysymys_id"), result.getString("vastausteksti"), result.getBoolean("oikein"));
+            vastaus2.setId(result.getInt("id"));
+            return vastaus2;
         }
     }
     
+    @Override
     public Vastaus findOne(Integer id) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Vastaus WHERE id = ?");

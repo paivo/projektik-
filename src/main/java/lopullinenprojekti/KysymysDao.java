@@ -19,7 +19,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
     public KysymysDao(Database database) {
         this.database = database;
     }
-
+     
     /**
      *
      * @return @throws SQLException
@@ -53,7 +53,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         if ( (kysymys.getKurssi().isEmpty() || kysymys.getAihe().isEmpty() || kysymys.getKysymysteksti().isEmpty()) ) {
             return;
         }
-        if (findOne(kysymys)) {
+        if (findOne(kysymys)!=null) {
             return;
         }
         Connection conn = database.getConnection();
@@ -67,6 +67,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         conn.close();
     }
     
+    @Override
     public Kysymys findOne(Integer id) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Kysymys WHERE id = ?");
@@ -81,7 +82,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
     }
     
     @Override
-    public Boolean findOne(Kysymys kysymys) throws SQLException {
+    public Vastaus findOne(Kysymys kysymys) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Kysymys WHERE kurssi = ? AND aihe = ? AND kysymysteksti = ?");
             stmt.setString(1, kysymys.getKurssi());
@@ -89,11 +90,13 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
             stmt.setString(3, kysymys.getKysymysteksti());
 
             ResultSet result = stmt.executeQuery();
-            return result.next();
+            result.next();
+            Kysymys kysymys2 = new Kysymys( result.getString("kurssi"), result.getString("aihe"), result.getString("kysymysteksti"));
+            kysymys2.setId(result.getInt("id"));
+            return kysymys2;
         }
     }
 
-    @Override
     public void delete(Kysymys kysymys) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM Kysymys WHERE kurssi = ? AND aihe = ? AND kysymysteksti = ?");

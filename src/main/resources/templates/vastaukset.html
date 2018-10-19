@@ -8,11 +8,22 @@
 
     <body>
         <h1 th:text="${#lists.isEmpty(vastaukset)} ? 'Lisää ensin vastaus!' : 'Valitse vastaus'"> </h1>
-        
+
         <ul>
             <li th:each="vastaus: ${vastaukset}">
                 <a th:text="${vastaus.vastausteksti}" th:href="${'/oikein/' + vastaus.id}"></a>
             </li>
         </ul>
+
+        <h2>Uuden kysymyksen luominen:</h2>
+        <form method="POST" action="/">
+            Kurssi:<br/>
+            <input type="text" name="kurssi"/><br/>
+            Aihe:<br/>
+            <input type="text" name="aihe"/><br/>
+            Kysymys:<br/>
+            <input type="text" name="kysymys"/><br/>
+            <input type="submit" value="+"/>
+        </form>
     </body>
 </html>

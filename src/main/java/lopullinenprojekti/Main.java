@@ -104,9 +104,9 @@ public class Main {
         //////////////////////////////kysymysten poistaminen
     Spark.post ( 
         "/delete/:id", (req, res) -> {
-        vdao.deleteKysymyksenVastaukset(Integer.parseInt(":id"));
+        vdao.deleteKysymyksenVastaukset(Integer.parseInt(req.params("id")));
         kdao.delete(Integer.parseInt(":id"));
-        res.redirect("/index");
+        res.redirect("/");
         return "";
     }
 
@@ -116,7 +116,7 @@ public class Main {
         
     get( 
         "/vastaukset/:id", (req, res) -> {
-            Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
+        Kysymys kysymys = kdao.findOne(Integer.parseInt(req.params("id")));
         HashMap vastaukset = new HashMap();
         vastaukset.put("vastaukset", vdao.getKysymyksenVastaukset(kysymys));
         vastaukset.put("kysymys", kysymys);
@@ -131,7 +131,7 @@ public class Main {
     get( 
         "/oikein/:id", (req, res) -> {
             HashMap vastaus = new HashMap();
-        vastaus.put("vastaus", vdao.findOne(Integer.parseInt(":id")));
+        vastaus.put("vastaus", vdao.findOne(Integer.parseInt(req.params("id"))));
         return new ModelAndView(vastaus, "oikein");
     }
      ,

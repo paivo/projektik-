@@ -104,9 +104,9 @@ public class Main {
         //////////////////////////////kysymysten poistaminen
     Spark.post ( 
         "/delete/:id", (req, res) -> {
-            vdao.deleteKysymyksenVastaukset(Integer.parseInt(":id"));
+        vdao.deleteKysymyksenVastaukset(Integer.parseInt(":id"));
         kdao.delete(Integer.parseInt(":id"));
-        res.redirect("/");
+        res.redirect("/index");
         return "";
     }
 

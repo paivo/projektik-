@@ -5,6 +5,7 @@
  */
 package lopullinenprojekti;
 
+import java.io.File;
 import java.util.*;
 import java.sql.*;
 
@@ -18,6 +19,16 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
 
     public KysymysDao(Database database) {
         this.database = database;
+    }
+
+    public static Connection getConnection() throws Exception {
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        if (dbUrl != null && dbUrl.length() > 0) {
+            return DriverManager.getConnection(dbUrl);
+        }
+        File tiedosto = new File("db", "taulu.db");
+
+        return DriverManager.getConnection("jdbc:sqlite:" + tiedosto.getAbsolutePath());
     }
 
     /**
@@ -50,7 +61,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
 
     @Override
     public void save(Kysymys kysymys) throws SQLException {
-        if ( (kysymys.getKurssi().isEmpty() || kysymys.getAihe().isEmpty() || kysymys.getKysymysteksti().isEmpty()) ) {
+        if ((kysymys.getKurssi().isEmpty() || kysymys.getAihe().isEmpty() || kysymys.getKysymysteksti().isEmpty())) {
             return;
         }
         if (findOne(kysymys)) {
@@ -66,7 +77,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         stmt.close();
         conn.close();
     }
-    
+
     public Kysymys findOne(Integer id) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Kysymys WHERE id = ?");
@@ -74,12 +85,12 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
 
             ResultSet result = stmt.executeQuery();
             result.next();
-            Kysymys kysymys = new Kysymys( result.getString("kurssi"), result.getString("aihe"), result.getString("kysymysteksti"));
+            Kysymys kysymys = new Kysymys(result.getString("kurssi"), result.getString("aihe"), result.getString("kysymysteksti"));
             kysymys.setId(id);
             return kysymys;
         }
     }
-    
+
     @Override
     public Boolean findOne(Kysymys kysymys) throws SQLException {
         try (Connection conn = database.getConnection()) {
@@ -93,7 +104,6 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
         }
     }
 
-    
     public void delete(Kysymys kysymys) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM Kysymys WHERE kurssi = ? AND aihe = ? AND kysymysteksti = ?");
@@ -103,7 +113,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
             stmt.executeUpdate();
         }
     }
-    
+
     public void delete(Integer id) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM Kysymys WHERE id = ?");
@@ -111,52 +121,52 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
             stmt.executeUpdate();
         }
     }
-    
+
     public List<Kysymys> getKysymykset(String kurssi, String aihe) throws SQLException {
         List<Kysymys> kysymykset = new ArrayList();
-        for (Kysymys kysymys: findAll()){
-            if ( ( kysymys.getAihe().equals(aihe) )&&( !kysymykset.contains(kysymys) )&&( kysymys.getKurssi().equals(kurssi)) ){
+        for (Kysymys kysymys : findAll()) {
+            if ((kysymys.getAihe().equals(aihe)) && (!kysymykset.contains(kysymys)) && (kysymys.getKurssi().equals(kurssi))) {
                 //valitaan vain kyseisen aiheen kysymykset ja lisätään ne vain kerran
                 kysymykset.add(kysymys);
             }
         }
         return kysymykset;
     }
-    
+
     public List<Kysymys> findKysymysPerAihe(String kurssi) throws SQLException {
         List<Kysymys> kysymykset = new ArrayList();
         //Tarkistetaan onko kysymykset listassa jo kysymystä joilla sama kurssi.
-        for(Kysymys kysymys: findAll()){
+        for (Kysymys kysymys : findAll()) {
             int i = 0;
-            for (Kysymys kysymys2: kysymykset){
-                if (kysymys.getAihe().equals(kysymys2.getAihe())){
-                    i=1;
+            for (Kysymys kysymys2 : kysymykset) {
+                if (kysymys.getAihe().equals(kysymys2.getAihe())) {
+                    i = 1;
                 }
             }
-            
-            if ( (i==0) && (kysymys.getKurssi().equals(kurssi)) ){
+
+            if ((i == 0) && (kysymys.getKurssi().equals(kurssi))) {
                 kysymykset.add(kysymys);
             }
         }
-        
+
         return kysymykset;
     }
-    
+
     public List<Kysymys> findKysymysPerKurssi() throws SQLException {
         List<Kysymys> kysymykset = new ArrayList();
         //Tarkistetaan onko kysymykset listassa jo kysymystä jolla sama kurssi.
-        for(Kysymys kysymys: findAll()){
+        for (Kysymys kysymys : findAll()) {
             int i = 0;
-            for (Kysymys kysymys2: kysymykset){
-                if (kysymys.getKurssi().equals(kysymys2.getKurssi())){
+            for (Kysymys kysymys2 : kysymykset) {
+                if (kysymys.getKurssi().equals(kysymys2.getKurssi())) {
                     i++;
                 }
             }
-            if (i==0){
+            if (i == 0) {
                 kysymykset.add(kysymys);
             }
         }
-        
+
         return kysymykset;
     }
 }

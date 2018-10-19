@@ -5,6 +5,7 @@
  */
 package lopullinenprojekti;
 
+import java.io.File;
 import java.sql.*;
 
 public class Database {
@@ -14,6 +15,7 @@ public class Database {
     public Database(String databaseAddress) throws ClassNotFoundException {
         this.databaseAddress = databaseAddress;
     }
+    
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(databaseAddress);

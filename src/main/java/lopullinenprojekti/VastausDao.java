@@ -27,13 +27,8 @@ public class VastausDao implements Dao <Vastaus,Integer>{
     @Override
     public List<Vastaus> findAll() throws SQLException {
         List<Vastaus> vastaukset = new ArrayList();
-        Connection connection;
-        try {
-            connection = database.getConnection();
-        } catch (Exception ex) {
-            Logger.getLogger(VastausDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        Connection connection = database.getConnection();
+      
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Vastaus");
         ResultSet rs = stmt.executeQuery();
         

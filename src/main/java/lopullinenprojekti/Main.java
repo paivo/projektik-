@@ -39,9 +39,7 @@ public class Main {
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
             return new ModelAndView(map, "index");
-        },
-                new ThymeleafTemplateEngine()
-        );
+        }, new ThymeleafTemplateEngine());
 
         Spark.post("/", (req, res) -> {
             String kurssi = req.queryParams("kurssi");
@@ -57,61 +55,54 @@ public class Main {
             vdao.save(new Vastaus(kdao.findOne(kysymys).getId(), vastausteksti, oikein));
             res.redirect("/");
             return "";
-        }
-        );
+        });
 
         get("/kurssit", (req, res) -> {
             HashMap kysymykset = new HashMap();
             kysymykset.put("kysymykset", kdao.findKysymysPerKurssi());
             return new ModelAndView(kysymykset, "kurssit");
-        },
-                new ThymeleafTemplateEngine()
-        );
+        }, new ThymeleafTemplateEngine());
 
         get("/aiheet/:id", (req, res) -> {
             Kysymys kysymys = kdao.findOne(Integer.parseInt(req.params("id")));
             HashMap kysymykset = new HashMap();
             kysymykset.put("kysymykset", kdao.findKysymysPerAihe(kysymys.getKurssi()));
             return new ModelAndView(kysymykset, "aiheet");
-        },
-                new ThymeleafTemplateEngine()
-        );
+        }, new ThymeleafTemplateEngine());
 
         get("/kysymykset/:id", (req, res) -> {
             Kysymys kysymys = kdao.findOne(Integer.parseInt(req.params("id")));
             HashMap kysymykset = new HashMap();
             kysymykset.put("kysymykset", kdao.getKysymykset(kysymys.getKurssi(), kysymys.getAihe()));
             return new ModelAndView(kysymykset, "kysymykset");
-        },
-                new ThymeleafTemplateEngine()
-        );
-
-        //////////////////////////////kysymysten poistaminen
-        Spark.post("/delete/:id", (req, res) -> {
-            vdao.deleteKysymyksenVastaukset(Integer.parseInt(":id"));
-            kdao.delete(Integer.parseInt(":id"));
+        }, new ThymeleafTemplateEngine());
+        
+        Spark.post("/deletekysymys/:id", (req, res) -> {
+            Integer id = Integer.parseInt(req.params("id"));
+            vdao.deleteKysymyksenVastaukset(id);
+            kdao.delete(id);
             res.redirect("/");
             return "";
-        }
-        );
-
-        ////////////////////////////////
+        });
+        
         get("/vastaukset/:id", (req, res) -> {
             Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
             HashMap vastaukset = new HashMap();
             vastaukset.put("vastaukset", vdao.getKysymyksenVastaukset(kysymys));
             vastaukset.put("kysymys", kysymys);
             return new ModelAndView(vastaukset, "vastaukset");
-        },
-                new ThymeleafTemplateEngine()
-        );
+        }, new ThymeleafTemplateEngine());
+        
+        Spark.post("/deletevastaus/:id", (req, res) -> {
+            vdao.delete(Integer.parseInt(req.params("id")));
+            res.redirect("/");
+            return "";
+        });
 
         get("/oikein/:id", (req, res) -> {
             HashMap vastaus = new HashMap();
             vastaus.put("vastaus", vdao.findOne(Integer.parseInt(":id")));
             return new ModelAndView(vastaus, "oikein");
-        },
-                new ThymeleafTemplateEngine()
-        );
+        }, new ThymeleafTemplateEngine());
     }
 }

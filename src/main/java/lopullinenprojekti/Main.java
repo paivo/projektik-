@@ -70,11 +70,11 @@ public class Main {
         }, new ThymeleafTemplateEngine());
         
         //////////////////////////////kysymysten poistaminen
-        Spark.post("/kysymykset/:id", (req, res) -> {
+        Spark.post("/delete/:id", (req, res) -> {
             if (req.queryParams("poista")!= null ){
             Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
-            kdao.delete(kysymys);
             vdao.deleteKysymyksenVastaukset(kysymys);
+            kdao.delete(kysymys);
             }
             res.redirect("/");
             return "";

@@ -78,6 +78,7 @@ public class Main {
             Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
             HashMap vastaukset = new HashMap();
             vastaukset.put("vastaukset", vdao.getKysymyksenVastaukset(kysymys));
+            vastaukset.put("kysymys", kysymys);
             return new ModelAndView(vastaukset, "vastaukset");
         }, new ThymeleafTemplateEngine());
         

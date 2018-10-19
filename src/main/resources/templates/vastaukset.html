@@ -7,7 +7,7 @@
     </head>
 
     <body>
-        <h1>Valitse Vastaus</h1>
+        <h1 th:text="${#lists.isEmpty(vastaukset)} ? 'Lisää ensin vastaus!' : 'Valitse vastaus'"> </h1>
         
         <ul>
             <li th:each="vastaus: ${vastaukset}">

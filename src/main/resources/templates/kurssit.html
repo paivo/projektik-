@@ -7,11 +7,14 @@
     </head>
 
     <body>
-        <h2 th:text="${#lists.isEmpty(kysymykset)} ? 'Lisää ensin kysymys!' : 'Valitse kurssi'"> </h2>
-        <ul>
-            <li th:each="kysymys: ${kysymykset}">
-                <span th:text="${kysymys.kurssi}">kurssi</span><a th:href="${'/aiheet/' + kysymys.id}">-></a>
-            </li>
-        </ul>
+        <h1 th:text="${#lists.isEmpty(kysymykset)} ? 'Lisää ensin kysymys!' : 'Valitse kurssi'"> </h1>
+        <div th:if="${!kysymykset.isEmpty()}">
+            <ul>
+                <li th:each="kysymys: ${kysymykset}">
+                    <span th:text="${kysymys.kurssi}">kurssi</span><a th:href="${'/aiheet/' + kysymys.id}">-></a>
+                    <input type='button' value='submit'>poista kysymys</input>
+                </li>
+            </ul>
+        </div>
     </body>
 </html>

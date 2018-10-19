@@ -86,7 +86,7 @@ public class Main {
         });
         
         get("/vastaukset/:id", (req, res) -> {
-            Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
+            Kysymys kysymys = kdao.findOne(Integer.parseInt(req.params("id")));
             HashMap vastaukset = new HashMap();
             vastaukset.put("vastaukset", vdao.getKysymyksenVastaukset(kysymys));
             vastaukset.put("kysymys", kysymys);
@@ -99,22 +99,20 @@ public class Main {
             return "";
         });
         
-        Spark.post("/add", (req, res) -> {
+        Spark.post("/add/:id", (req, res) -> {
             String vastausteksti = req.queryParams("vastausvaihtoehto");
             Boolean oikein = true;
             if (req.queryParams("oikein") == null) {
                 oikein = false;
             }
-            Kysymys kysymys = new Kysymys(kurssi, aihe, kysymysteksti);
-            kdao.save(kysymys);
-            vdao.save(new Vastaus(kdao.findOne(kysymys).getId(), vastausteksti, oikein));
+            vdao.save(new Vastaus(Integer.parseInt(req.params("id")), vastausteksti, oikein));
             res.redirect("/");
             return "";
         });
 
         get("/oikein/:id", (req, res) -> {
             HashMap vastaus = new HashMap();
-            vastaus.put("vastaus", vdao.findOne(Integer.parseInt(":id")));
+            vastaus.put("vastaus", vdao.findOne(Integer.parseInt(req.params("id"))));
             return new ModelAndView(vastaus, "oikein");
         }, new ThymeleafTemplateEngine());
     }

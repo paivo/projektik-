@@ -8,14 +8,22 @@
 
     <body>
         <h1 th:text="${#lists.isEmpty(vastaukset)} ? 'Lisää ensin vastaus!' : 'Valitse vastaus'"> </h1>
-        
+        <h2 th:text="${kysymys}"/>
         <ul>
             <li th:each="vastaus: ${vastaukset}">
                 <a th:text="${vastaus.vastausteksti}" th:href="${'/oikein/' + vastaus.id}"></a>
                 <form method="POST" th:action="@{~/deletevastaus/{id}(id=${vastaus.id})}">
-                    <input type="submit" value="Poista"/>
+                    <input type="submit" value="poista"/>
                 </form>
             </li>
-        </ul>
+        </ul><br/>
+        <form method="POST" action="/add">
+        Vastausvaihtoehto:<br/>
+        <input type="text" name="vastausvaihtoehto"/>
+        oikein:
+        <input type="checkbox" name="oikein"/><br/>
+        <input type="submit" value="+"/>
+    </form>
+        
     </body>
 </html>

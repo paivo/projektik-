@@ -98,6 +98,19 @@ public class Main {
             res.redirect("/");
             return "";
         });
+        
+        Spark.post("/add", (req, res) -> {
+            String vastausteksti = req.queryParams("vastausvaihtoehto");
+            Boolean oikein = true;
+            if (req.queryParams("oikein") == null) {
+                oikein = false;
+            }
+            Kysymys kysymys = new Kysymys(kurssi, aihe, kysymysteksti);
+            kdao.save(kysymys);
+            vdao.save(new Vastaus(kdao.findOne(kysymys).getId(), vastausteksti, oikein));
+            res.redirect("/");
+            return "";
+        });
 
         get("/oikein/:id", (req, res) -> {
             HashMap vastaus = new HashMap();

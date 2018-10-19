@@ -82,7 +82,7 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
     }
     
     @Override
-    public Vastaus findOne(Kysymys kysymys) throws SQLException {
+    public Kysymys findOne(Kysymys kysymys) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Kysymys WHERE kurssi = ? AND aihe = ? AND kysymysteksti = ?");
             stmt.setString(1, kysymys.getKurssi());
@@ -96,17 +96,8 @@ public class KysymysDao implements Dao<Kysymys, Integer> {
             return kysymys2;
         }
     }
-
-    public void delete(Kysymys kysymys) throws SQLException {
-        try (Connection conn = database.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Kysymys WHERE kurssi = ? AND aihe = ? AND kysymysteksti = ?");
-            stmt.setString(1, kysymys.getAihe());
-            stmt.setString(2, kysymys.getKurssi());
-            stmt.setString(3, kysymys.getKysymysteksti());
-            stmt.executeUpdate();
-        }
-    }
     
+    @Override
     public void delete(Integer id) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM Kysymys WHERE id = ?");

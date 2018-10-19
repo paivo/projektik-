@@ -71,11 +71,8 @@ public class Main {
         
         //////////////////////////////kysymysten poistaminen
         Spark.post("/delete/:id", (req, res) -> {
-            if (req.queryParams("poista")!= null ){
-            Kysymys kysymys = kdao.findOne(Integer.parseInt(":id"));
-            vdao.deleteKysymyksenVastaukset(kysymys);
-            kdao.delete(kysymys);
-            }
+            vdao.deleteKysymyksenVastaukset(Integer.parseInt(":id"));
+            kdao.delete(Integer.parseInt(":id"));
             res.redirect("/");
             return "";
         });

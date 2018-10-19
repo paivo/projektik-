@@ -92,19 +92,19 @@ public class VastausDao implements Dao <Vastaus,Integer>{
     }
     
     @Override
-    public void delete(Vastaus vastaus) throws SQLException {
+    public void delete(Integer id) throws SQLException {
         try (Connection conn = database.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Vastaus WHERE kysymys_id = ? AND vastausteksti = ? AND oikein = ?");
-            stmt.setInt(1, vastaus.getKysymysId());
-            stmt.setString(2, vastaus.getVastausteksti());
-            stmt.setBoolean(3, vastaus.getOikein());
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Vastaus WHERE id = ?");
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
         }
     }
     
-    public void deleteKysymyksenVastaukset(Kysymys kysymys) throws SQLException{
+    public void deleteKysymyksenVastaukset(Integer kysymys_id) throws SQLException{
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM Vastaus WHERE kysymys_id = ?");
-            stmt.setInt(1, kysymys.getId());
+            stmt.setInt(1, kysymys_id);
+            stmt.executeUpdate();
         }
     }
     

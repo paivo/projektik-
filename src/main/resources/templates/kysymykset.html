@@ -11,7 +11,7 @@
 
         <ul>
             <li th:each="kysymys: ${kysymykset}">
-                <span th:text="${kysymys.kysymysteksti}">kysymys</span> <a th:href="${'/vastaukset/' + kysymys.id}">-></a>
+                <a th:text="${kysymys.kysymysteksti}" th:href="${'/vastaukset/' + kysymys.id}"></a>
                 
                 <form th:action="@{~/delete/{id}(id=${kysymys.id})}" method="POST">
                     <input type="submit" value="Poista"/>

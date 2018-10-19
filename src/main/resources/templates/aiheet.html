@@ -11,7 +11,7 @@
         
         <ul>
             <li th:each="kysymys: ${kysymykset}">
-                <span th:text="${kysymys.aihe}">aihe</span> <a th:href="${'/kysymykset/' + kysymys.id}">-></a>
+                <a th:text="${kysymys.aihe}" th:href="${'/kysymykset/' + kysymys.id}"></a>
             </li>
         </ul>
     </body>

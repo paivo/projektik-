@@ -11,7 +11,7 @@
         
         <ul>
             <li th:each="vastaus: ${vastaukset}">
-                <span th:text="${vastaus.vastausteksti}">vastaus</span> <a th:href="${'/oikein/' + vastaus.id}">-></a>
+                <a th:text="${vastaus.vastausteksti}" th:href="${'/oikein/' + vastaus.id}"></a>
             </li>
         </ul>
     </body>

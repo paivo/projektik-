@@ -11,5 +11,5 @@ public interface Dao<T, K> {
 
     void save(T object) throws SQLException;
 
-    void delete(T object) throws SQLException;
+    void delete(Integer id) throws SQLException;
 }

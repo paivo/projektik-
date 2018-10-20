@@ -5,6 +5,7 @@
  */
 package lopullinenprojekti;
 
+import java.io.File;
 import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,8 +25,9 @@ public class Database {
         if (dbUrl != null && dbUrl.length() > 0) {
             return DriverManager.getConnection(dbUrl);
         }
+        File tiedosto = new File("db", "taulu.db");
 
-        return DriverManager.getConnection("jdbc:sqlite:taulu.db");
+        return DriverManager.getConnection("jdbc:sqlite:" + tiedosto.getAbsolutePath());
     }
     
     public void init() {

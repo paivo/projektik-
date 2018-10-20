@@ -47,12 +47,14 @@ public class Main {
             String kysymysteksti = req.queryParams("kysymys");
             Boolean oikein = true;
             String vastausteksti = req.queryParams("vastausvaihtoehto");
+            Kysymys kysymys = new Kysymys(kurssi, aihe, kysymysteksti);
+            kdao.save(kysymys);
             if (req.queryParams("oikein") == null) {
                 oikein = false;
             }
-            Kysymys kysymys = new Kysymys(kurssi, aihe, kysymysteksti);
-            kdao.save(kysymys);
-            vdao.save(new Vastaus(kdao.findOne(kysymys).getId(), vastausteksti, oikein));
+            if (vastausteksti!= null){
+                vdao.save(new Vastaus(kdao.findOne(kysymys).getId(), vastausteksti, oikein));
+            }
             res.redirect("/");
             return "";
         });

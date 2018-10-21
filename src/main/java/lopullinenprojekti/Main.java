@@ -32,7 +32,6 @@ public class Main {
         }
         File tiedosto = new File("db", "taulu.db");
         Database database = new Database("jdbc:sqlite:" + tiedosto.getAbsolutePath());
-        database.init();
 
         VastausDao vdao = new VastausDao(database);
         KysymysDao kdao = new KysymysDao(database);
